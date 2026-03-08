@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Crypto Insights | Blockchain Analytics</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"
+      type="application/javascript"
+    ></script>
+  </head>
+  <body>
+    <div class="animated-bg"></div>
+
+    <header>
+      <nav class="glass-nav">
+        <div class="logo">
+          <span class="neon-text">CRYPTO</span
+          ><span class="white-text">AI</span>
+        </div>
+        <div class="nav-links">
+          <a href="#dashboard" class="active">Dashboard</a>
+          <a href="#prediction">AI Prediction</a>
+          <a href="#blockchain">Blockchain</a>
+        </div>
+        <button id="connectWallet" class="btn-neon">
+          <span class="btn-text">Connect Wallet</span>
+          <div class="btn-glow"></div>
+        </button>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- Market Overview Section -->
+      <section id="dashboard" class="hero-section">
+        <div class="section-header">
+          <h1 class="glow-text">Market Intelligence</h1>
+          <p class="subtitle">Real-time analytics powered by Neural Networks</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="glass-card stat-card" id="btc-card">
+            <div class="card-glow"></div>
+            <h3>Bitcoin (BTC)</h3>
+            <div class="price-info">
+              <span class="current-price" id="btc-price">$--,---</span>
+              <span class="price-change positive" id="btc-change">+0.00%</span>
+            </div>
+          </div>
+          <div class="glass-card stat-card" id="eth-card">
+            <div class="card-glow"></div>
+            <h3>Ethereum (ETH)</h3>
+            <div class="price-info">
+              <span class="current-price" id="eth-price">$--,---</span>
+              <span class="price-change positive" id="eth-change">+0.00%</span>
+            </div>
+          </div>
+          <div class="glass-card stat-card" id="sol-card">
+            <div class="card-glow"></div>
+            <h3>Solana (SOL)</h3>
+            <div class="price-info">
+              <span class="current-price" id="sol-price">$---.--</span>
+              <span class="price-change negative" id="sol-change">-0.00%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Prediction & Analytics Section -->
+      <section id="prediction" class="analytics-section">
+        <div class="grid-2-col">
+          <div class="glass-card chart-container">
+            <div class="card-header">
+              <h2>Price Projection</h2>
+              <div class="coin-selector">
+                <select id="selectedCoin">
+                  <option value="bitcoin">Bitcoin</option>
+                  <option value="ethereum">Ethereum</option>
+                </select>
+              </div>
+            </div>
+            <canvas id="priceChart"></canvas>
+          </div>
+
+          <div class="glass-card prediction-panel">
+            <h2>AI Engine</h2>
+            <div class="prediction-box">
+              <div class="predict-stat">
+                <label>Next Predicted Price</label>
+                <span id="predictedValue" class="neon-value">$0.00</span>
+              </div>
+              <div class="predict-stat">
+                <label>Model Confidence</label>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 85%"></div>
+                </div>
+              </div>
+              <button id="runPrediction" class="btn-gradient">
+                Analyze Market
+              </button>
+              <button id="savePrediction" class="btn-outline" disabled>
+                Log to Chain
+              </button>
+            </div>
+            <div class="prediction-info">
+              <p>
+                <i class="info-icon"></i> Uses Linear Regression on 30-day
+                historical data.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Blockchain Logs -->
+      <section id="blockchain" class="history-section">
+        <div class="glass-card history-container">
+          <div class="card-header">
+            <h2>Blockchain Ledger</h2>
+            <span class="status-tag">Connected to Localhost</span>
+          </div>
+          <div class="table-wrapper">
+            <table id="predictionHistory">
+              <thead>
+                <tr>
+                  <th>Predictor</th>
+                  <th>Asset</th>
+                  <th>Predicted Value</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <!-- Injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CryptoAI Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="prediction.js"></script>
+    <script src="charts.js"></script>
+    <script src="blockchain.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

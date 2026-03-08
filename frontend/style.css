@@ -1,0 +1,322 @@
+:root {
+  --bg-color: #030712;
+  --glass-bg: rgba(17, 25, 40, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.125);
+  --neon-blue: #00d2ff;
+  --neon-purple: #9d50bb;
+  --neon-green: #39ff14;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Animated Background */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #030712 100%);
+}
+
+.animated-bg::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  opacity: 0.1;
+  animation: rotate 100s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-25%, -25%) rotate(0deg);
+  }
+  to {
+    transform: translate(-25%, -25%) rotate(360deg);
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Glassmorphism Navigation */
+.glass-nav {
+  position: sticky;
+  top: 1rem;
+  margin: 1rem 2rem;
+  padding: 1rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.neon-text {
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin: 0 1.5rem;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  color: var(--neon-blue);
+}
+
+/* Components */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 210, 255, 0.4);
+}
+
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 210, 255, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Buttons */
+.btn-neon {
+  background: transparent;
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  padding: 0.6rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.btn-neon:hover {
+  background: var(--neon-blue);
+  color: var(--bg-color);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+}
+
+.btn-gradient {
+  background: var(--accent-gradient);
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  margin-top: 1rem;
+  transition: 0.3s;
+}
+
+.btn-gradient:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: 0.3s;
+}
+
+.btn-outline:not(:disabled):hover {
+  border-color: var(--neon-purple);
+  color: white;
+}
+
+.btn-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.stat-card h3 {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.current-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.price-change {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.positive {
+  color: var(--neon-green);
+}
+.negative {
+  color: #ff4d4d;
+}
+
+.chart-container {
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+#priceChart {
+    flex-grow: 1;
+    max-height: 350px;
+}
+
+/* Grid Layouts */
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+/* Prediction Styles */
+.neon-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--neon-blue);
+  margin: 1rem 0;
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-gradient);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+/* Table Styles */
+.table-wrapper {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animations */
+.glow-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 3rem;
+  background: linear-gradient(to right, #fff, #c3dafe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .grid-2-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .glass-nav {
+    margin: 1rem;
+    padding: 0.8rem 1rem;
+  }
+  .nav-links {
+    display: none;
+  }
+}
