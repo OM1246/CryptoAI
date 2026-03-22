@@ -66,6 +66,38 @@ class PredictionModel {
 }
 
 async function fetchHistoricalData(coinId = 'bitcoin', days = 30) {
+    const categoryElement = document.getElementById('assetCategory');
+    const category = categoryElement ? categoryElement.value : 'crypto';
+    
+    if (category === 'stock') {
+        const prices = [];
+        const labels = [];
+        const raw = [];
+        
+        const basePrices = {
+            'AAPL': 175.50,
+            'MSFT': 415.20,
+            'GOOGL': 140.80,
+            'AMZN': 178.10,
+            'TSLA': 190.40
+        };
+        
+        let currentPrice = basePrices[coinId] || 100;
+        
+        for (let i = days; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            labels.push(d.toLocaleDateString());
+            
+            const change = (Math.random() * 0.05) - 0.024;
+            currentPrice = currentPrice * (1 + change);
+            prices.push(currentPrice);
+            raw.push([d.getTime(), currentPrice]);
+        }
+        
+        return { prices, labels, raw };
+    }
+
     try {
         const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`);
         const data = await response.json();

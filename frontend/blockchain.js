@@ -39,12 +39,26 @@ function updateWalletUI(address) {
     document.getElementById('savePrediction').disabled = false;
 }
 
+let localHistory = []; // Mock blockchain state
+
 async function logPrediction(coin, price) {
-    if (!contract) return;
+    const priceToStore = Math.round(price * 100);
+
+    if (!contract) {
+        // Mock the blockchain log
+        const pseudoAddress = "0x" + Math.random().toString(16).slice(2, 12).padEnd(40, '0');
+        localHistory.push({
+            predictor: pseudoAddress,
+            coin: coin,
+            predictedPrice: priceToStore,
+            timestamp: Math.floor(Date.now() / 1000)
+        });
+        console.log("Prediction logged to local mock chain!");
+        loadPredictionHistory();
+        return;
+    }
 
     try {
-        // Convert price to integer for storage (USD * 100 to keep 2 decimals)
-        const priceToStore = Math.round(price * 100);
         const tx = await contract.storePrediction(coin, priceToStore);
         await tx.wait();
         console.log("Prediction logged to blockchain!");
@@ -55,10 +69,17 @@ async function logPrediction(coin, price) {
 }
 
 async function loadPredictionHistory() {
-    if (!contract) return;
+    let history = localHistory;
+    
+    if (contract) {
+        try {
+            history = await contract.getPredictions();
+        } catch (error) {
+            console.error("Failed to load history from contract:", error);
+        }
+    }
 
     try {
-        const history = await contract.getPredictions();
         const tbody = document.getElementById('historyBody');
         tbody.innerHTML = '';
 

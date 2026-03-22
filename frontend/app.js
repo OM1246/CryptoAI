@@ -34,6 +34,35 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = false;
     });
 
+    document.getElementById('assetCategory').addEventListener('change', () => {
+        const category = document.getElementById('assetCategory').value;
+        const selectedCoin = document.getElementById('selectedCoin');
+        
+        selectedCoin.innerHTML = '';
+        
+        if (category === 'crypto') {
+            const cryptos = [
+                { value: 'bitcoin', text: 'Bitcoin' },
+                { value: 'ethereum', text: 'Ethereum' },
+                { value: 'solana', text: 'Solana' },
+                { value: 'ripple', text: 'Ripple (XRP)' },
+                { value: 'cardano', text: 'Cardano (ADA)' }
+            ];
+            cryptos.forEach(c => selectedCoin.add(new Option(c.text, c.value)));
+        } else {
+            const stocks = [
+                { value: 'AAPL', text: 'Apple (AAPL)' },
+                { value: 'MSFT', text: 'Microsoft (MSFT)' },
+                { value: 'GOOGL', text: 'Alphabet (GOOGL)' },
+                { value: 'AMZN', text: 'Amazon (AMZN)' },
+                { value: 'TSLA', text: 'Tesla (TSLA)' }
+            ];
+            stocks.forEach(s => selectedCoin.add(new Option(s.text, s.value)));
+        }
+        
+        runNewPrediction();
+    });
+
     document.getElementById('selectedCoin').addEventListener('change', () => {
         runNewPrediction();
     });
@@ -78,5 +107,8 @@ async function runNewPrediction() {
         // Slightly randomize confidence for visual effect
         const confidence = GEMINI_API_KEY ? (92 + Math.random() * 5) : (85 + Math.random() * 10);
         document.querySelector('.progress-fill').style.width = `${confidence}%`;
+        
+        // Enable log to chain button once prediction is ready
+        document.getElementById('savePrediction').disabled = false;
     }
 }
