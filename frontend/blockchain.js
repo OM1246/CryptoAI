@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // Default Hardhat local address
+const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 const ABI = [
     "function storePrediction(string coin, uint256 predictedPrice) public",
     "function getPredictions() public view returns (tuple(address predictor, string coin, uint256 predictedPrice, uint256 timestamp)[])",
@@ -24,6 +24,9 @@ async function connectWallet() {
             return true;
         } catch (error) {
             console.error("User rejected connection or error occurred:", error);
+            if (error.code === -32002) {
+                alert("MetaMask request already pending. Please check your MetaMask extension.");
+            }
             return false;
         }
     } else {
@@ -39,13 +42,12 @@ function updateWalletUI(address) {
     document.getElementById('savePrediction').disabled = false;
 }
 
-let localHistory = []; // Mock blockchain state
+let localHistory = []; // Fallback local logic
 
 async function logPrediction(coin, price) {
     const priceToStore = Math.round(price * 100);
 
     if (!contract) {
-        // Mock the blockchain log
         const pseudoAddress = "0x" + Math.random().toString(16).slice(2, 12).padEnd(40, '0');
         localHistory.push({
             predictor: pseudoAddress,
@@ -53,18 +55,19 @@ async function logPrediction(coin, price) {
             predictedPrice: priceToStore,
             timestamp: Math.floor(Date.now() / 1000)
         });
-        console.log("Prediction logged to local mock chain!");
+        console.log("Prediction logged locally (Wallet not connected)!");
         loadPredictionHistory();
         return;
     }
 
     try {
         const tx = await contract.storePrediction(coin, priceToStore);
-        await tx.wait();
-        console.log("Prediction logged to blockchain!");
-        loadPredictionHistory();
+        await tx.wait(); // Wait for transaction confirmation
+        console.log("Prediction successfully logged to blockchain!");
+        loadPredictionHistory(); // Reload history directly from contract
     } catch (error) {
         console.error("Blockchain logging failed:", error);
+        alert("Blockchain logging failed. Make sure your Hardhat node is running and MetaMask is properly connected.");
     }
 }
 
@@ -76,6 +79,7 @@ async function loadPredictionHistory() {
             history = await contract.getPredictions();
         } catch (error) {
             console.error("Failed to load history from contract:", error);
+            return;
         }
     }
 
@@ -83,11 +87,15 @@ async function loadPredictionHistory() {
         const tbody = document.getElementById('historyBody');
         tbody.innerHTML = '';
 
-        // Reverse to show latest first
         [...history].reverse().forEach(log => {
             const row = document.createElement('tr');
-            const date = new Date(log.timestamp * 1000).toLocaleString();
-            const price = (log.predictedPrice / 100).toLocaleString(undefined, { minimumFractionDigits: 2 });
+            
+            // Fix for BigNumber from ethers.js vs local Number
+            const timestamp = log.timestamp.toNumber ? log.timestamp.toNumber() : log.timestamp;
+            const predictedPrice = log.predictedPrice.toNumber ? log.predictedPrice.toNumber() : log.predictedPrice;
+            
+            const date = new Date(timestamp * 1000).toLocaleString();
+            const price = (predictedPrice / 100).toLocaleString(undefined, { minimumFractionDigits: 2 });
             
             row.innerHTML = `
                 <td><span class="addr-tag">${log.predictor.substring(0, 10)}...</span></td>
@@ -98,6 +106,7 @@ async function loadPredictionHistory() {
             tbody.appendChild(row);
         });
     } catch (error) {
-        console.error("Failed to load history:", error);
+        console.error("Failed to render history:", error);
     }
 }
+

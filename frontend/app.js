@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('savePrediction').addEventListener('click', async () => {
         const coin = document.getElementById('selectedCoin').value;
-        const price = parseFloat(document.getElementById('predictedValue').innerText.replace('$', '').replace(',', ''));
+        const price = parseFloat(document.getElementById('predictedValue').innerText.replace(/\$/g, '').replace(/,/g, ''));
         
         const btn = document.getElementById('savePrediction');
         const originalText = btn.innerText;
